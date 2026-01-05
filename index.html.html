@@ -18,6 +18,7 @@
         .bg-cr { background-color: #faf5ff; color: #6b21a8; border-color: #f3e8ff; }
         .bg-baseline { background-color: #f8fafc; color: #475569; border-color: #e2e8f0; }
         .timeline-line { position: absolute; left: 7px; top: 0; bottom: 0; width: 1px; background: #e2e8f0; }
+        .next-steps-box { background-color: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; }
         .timeline-dot { width: 14px; height: 14px; border-radius: 50%; background: white; border: 2px solid #cbd5e1; position: relative; z-index: 10; }
         .timeline-dot.active { border-color: #4f46e5; background: #4f46e5; }
         .ai-panel { background-color: #f8faff; border: 1px solid #e0e7ff; border-radius: 2px; }
@@ -90,6 +91,24 @@
                     <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-600"></i> AI-Assisted Clinical Summary (For Review Only)
                 </h2>
                 <ul id="aiSummaryPoints" class="space-y-4 text-[12px] text-slate-700 font-medium"></ul>
+
+
+
+                
+<div class="next-steps-box p-4 mt-6">
+    <div class="flex items-center gap-2 mb-2">
+        <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5 text-indigo-600"></i>
+        <span class="text-[10px] font-black text-indigo-900 uppercase tracking-widest">Clinical Considerations (Next Steps)</span>
+    </div>
+    <ul id="aiNextSteps" class="space-y-2 text-[11px] text-indigo-800 font-semibold leading-snug list-disc pl-4">
+        <!-- Next steps will be injected here -->
+    </ul>
+</div>
+
+
+
+
+                
             </section>
 
             <section class="clinical-card p-6">
@@ -517,15 +536,31 @@
             });
         }
 
+        // function renderAISummary() {
+        //     const list = document.getElementById('aiSummaryPoints');
+        //     list.innerHTML = selectedPt.AISummary.map(p => `
+        //         <li class="flex gap-3 leading-relaxed">
+        //             <i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0 text-indigo-400 mt-0.5"></i>
+        //             <span>${p}</span>
+        //         </li>
+        //     `).join('');
+        // }
+
+
         function renderAISummary() {
-            const list = document.getElementById('aiSummaryPoints');
-            list.innerHTML = selectedPt.AISummary.map(p => `
-                <li class="flex gap-3 leading-relaxed">
-                    <i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0 text-indigo-400 mt-0.5"></i>
-                    <span>${p}</span>
-                </li>
-            `).join('');
-        }
+    // Renders the main summary bullets
+    document.getElementById('aiSummaryPoints').innerHTML = selectedPt.AISummary.map(p => 
+        `<li class="flex gap-3 leading-relaxed"><i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0 text-indigo-400 mt-0.5"></i><span>${p}</span></li>`
+    ).join('');
+
+    // Renders the new Next Steps box
+    const nextStepsList = document.getElementById('aiNextSteps');
+    if (selectedPt.NextSteps) {
+        nextStepsList.innerHTML = selectedPt.NextSteps.map(s => `<li>${s}</li>`).join('');
+    } else {
+        nextStepsList.innerHTML = "<li>No immediate actions identified. Maintain current surveillance.</li>";
+    }
+}
 
         function renderMolecular() {
             const container = document.getElementById('molecularList');
